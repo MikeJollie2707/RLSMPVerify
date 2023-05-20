@@ -9,6 +9,9 @@ import datetime as dt
 # Message block format
 from textwrap import dedent
 
+# Make sure to change this in production.
+PROMPT_DESTINATION = 1102847625813831680
+
 # The modal/form itself.
 class VerifyModal(miru.Modal):
     prompt1 = miru.TextInput(label = "Question 1", min_length = 10, max_length = 500, required = True)
@@ -72,7 +75,7 @@ if __name__ == "__main__":
         event.app.d.initial_view = view
 
         message = await event.app.rest.fetch_message(
-            channel = 1102847625813831680,
+            channel = PROMPT_DESTINATION,
             message = event.app.d.msg_id,
         )
 
@@ -90,11 +93,10 @@ if __name__ == "__main__":
             message: hikari.Message = ctx.bot.d.initial_view.message # Mostly for linting purpose, you can remove this line tbh.
             await ctx.respond(f"Detected an active prompt here: {message.make_link(ctx.guild_id)}. Unlinking it...")
             ctx.bot.d.initial_view.stop()
-
         
         view = ModalTrigger()
         msg = await ctx.bot.rest.create_message(
-            1102847625813831680, 
+            PROMPT_DESTINATION, 
             dedent('''
             Welcome to RLSMP! The Minecraft and Discord server are locked behind this gate to ensure a safe atmosphere. While it's a private server now, you can request access if you wish to chat or play.
 
