@@ -118,6 +118,9 @@ if __name__ == "__main__":
             components = view.build()
         )
         await view.start(msg)
+
+        # Now we respond to the command's interaction.
+        await ctx.respond(f"A new prompt has been created in <#{PROMPT_DESTINATION}>. Go check it out.")
         
         ctx.bot.d.initial_view = view
         # Tbf this attr only matters on startup so you can probably not update this.
