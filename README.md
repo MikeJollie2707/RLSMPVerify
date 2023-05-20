@@ -23,6 +23,16 @@ To run the bot:
 python3 main.py
 ```
 
+Or if you want some optimizations (although it doesn't really matter):
+
+```
+python3 -O main.py
+```
+
+That's an "old", not "zero".
+
 ## Contribute
 
-Pull request. Don't push to `main`.
+- `git init` then `git pull` or just extract the code with zip.
+- Pull request. Don't push to `main`.
+- Make sure to change the channel ID in `main.py` to suit your need. By default, the values are NOT production-ready.

@@ -1,6 +1,9 @@
 # This is a quick-and-dirty bot to solve an issue in RLSMP.
 # Therefore, the code practices/styles is going to be horrendous. Feel free to refactor it if you want to.
 
+# For Discord components: https://hikari-miru.readthedocs.io/en/latest/
+# For Discord commands in general: https://hikari-lightbulb.readthedocs.io/en/latest/
+
 import hikari
 import lightbulb
 import miru
@@ -26,6 +29,7 @@ class VerifyModal(miru.Modal):
         for i, prompt in enumerate(PROMPTS):
             self.add_item(miru.TextInput(label = prompt, min_length = 5, max_length = 500, required = True))
 
+    # This function is called when the user submit the form.
     async def callback(self, ctx: miru.ModalContext):
         # approvals
         STAFF_REVIEW_CHANNEL_ID = 1102780545609515118
@@ -74,6 +78,7 @@ if __name__ == "__main__":
 
     # These 2 are needed for the bot to listen for buttons even after restart.
     # For more info, visit https://hikari-miru.readthedocs.io/en/latest/guides/persistent_views.html#bound
+    # Using bot.d we can store custom attributes without global variables.
     bot.d.msg_id = persisting_msg
     bot.d.initial_view = None
 
@@ -98,6 +103,7 @@ if __name__ == "__main__":
     @lightbulb.command("send_prompt", "Send the prompt for verification. Only used once unless there are errors.")
     @lightbulb.implements(lightbulb.SlashCommand)
     async def send_prompt(ctx: lightbulb.Context):
+        # Check if we're listening for interactions in a message.
         if ctx.bot.d.initial_view.message:
             message: hikari.Message = ctx.bot.d.initial_view.message # Mostly for linting purpose, you can remove this line tbh.
             await ctx.respond(f"Detected an active prompt here: {message.make_link(ctx.guild_id)}. Unlinking it...")
