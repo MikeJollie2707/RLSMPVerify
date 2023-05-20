@@ -9,13 +9,22 @@ import datetime as dt
 # Message block format
 from textwrap import dedent
 
+# Modal limitation is 5 prompts, each prompt is 45 characters max.
+PROMPTS = (
+    "Question 1",
+    "Question 2",
+)
 # Make sure to change this in production.
 PROMPT_DESTINATION = 1102847625813831680
 
 # The modal/form itself.
 class VerifyModal(miru.Modal):
-    prompt1 = miru.TextInput(label = "Question 1", min_length = 10, max_length = 500, required = True)
-    prompt2 = miru.TextInput(label = "Question 2", min_length = 10, max_length = 500, required = True)
+    def __init__(self, title: str, *, custom_id: str | None = None, timeout: float | int | dt.timedelta | None = 300) -> None:
+        super().__init__(title, custom_id=custom_id, timeout=timeout)
+        
+        # Dynamically add prompts to modal.
+        for i, prompt in enumerate(PROMPTS):
+            self.add_item(miru.TextInput(label = prompt, min_length = 5, max_length = 500, required = True))
 
     async def callback(self, ctx: miru.ModalContext):
         # approvals
