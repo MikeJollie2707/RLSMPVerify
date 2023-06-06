@@ -4,7 +4,7 @@ Create a `token.json` in this directory (setup) with the following format:
 
 ```json
 {
-    "token": "bot token",
+    "token": "ODQ0MTE3NjU3OTI5MTIxODAy.YKNv1A.2dIjSO7VF5x4_dv45A1LtXI3OvY",
     "target_msg": "1115732369148739674"
 }
 ```
