@@ -36,7 +36,7 @@ class VerifyModal(miru.Modal):
 
         embed = hikari.Embed(
             title = "Verification Pending",
-            description = f"Oncoming response from {ctx.author.mention}",
+            description = f"Oncoming response from {ctx.author.mention} ({ctx.author})",
             timestamp = dt.datetime.now().astimezone(),
         )
 
