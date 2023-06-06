@@ -18,7 +18,7 @@ PROMPTS = (
     "Question 2",
 )
 # Make sure to change this in production.
-PROMPT_DESTINATION = 1115730155483185252
+PROMPT_DESTINATION = 1102847625813831680
 
 # The modal/form itself.
 class VerifyModal(miru.Modal):
@@ -32,7 +32,7 @@ class VerifyModal(miru.Modal):
     # This function is called when the user submit the form.
     async def callback(self, ctx: miru.ModalContext):
         # approvals
-        STAFF_REVIEW_CHANNEL_ID = 1115729185588129812
+        STAFF_REVIEW_CHANNEL_ID = 1102780545609515118
 
         embed = hikari.Embed(
             title = "Verification Pending",
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     
     @bot.command()
     # Check for Operators role.
-    @lightbulb.add_checks(lightbulb.has_roles(1115730276027482292))
+    @lightbulb.add_checks(lightbulb.has_roles(868609637778346024))
     @lightbulb.add_cooldown(length = 10.0, uses = 1, bucket = lightbulb.GlobalBucket)
     @lightbulb.command("send_prompt", "Send the prompt for verification. Only used once unless there are errors.")
     @lightbulb.implements(lightbulb.SlashCommand)
