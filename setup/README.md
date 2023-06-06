@@ -1,11 +1,11 @@
 # Setup
 
-Create a `token.json` with the following format:
+Create a `token.json` in this directory (setup) with the following format:
 
 ```json
 {
     "token": "bot token",
-    "target_msg": "msg id"
+    "target_msg": "1115732369148739674"
 }
 ```
 

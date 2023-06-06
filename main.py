@@ -18,7 +18,7 @@ PROMPTS = (
     "Question 2",
 )
 # Make sure to change this in production.
-PROMPT_DESTINATION = 1102847625813831680
+PROMPT_DESTINATION = 1115730155483185252
 
 # The modal/form itself.
 class VerifyModal(miru.Modal):
@@ -32,7 +32,7 @@ class VerifyModal(miru.Modal):
     # This function is called when the user submit the form.
     async def callback(self, ctx: miru.ModalContext):
         # approvals
-        STAFF_REVIEW_CHANNEL_ID = 1102780545609515118
+        STAFF_REVIEW_CHANNEL_ID = 1115729185588129812
 
         embed = hikari.Embed(
             title = "Verification Pending",
@@ -69,7 +69,7 @@ class ModalTrigger(miru.View):
         await ctx.respond_with_modal(modal)
 
 if __name__ == "__main__":
-    with open("./setup/token.json") as fin:
+    with open("./setup/config.json") as fin:
         data = json.load(fin)
         token = data["token"]
         persisting_msg = data["target_msg"]
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     
     @bot.command()
     # Check for Operators role.
-    @lightbulb.add_checks(lightbulb.has_roles(868609637778346024))
+    @lightbulb.add_checks(lightbulb.has_roles(1115730276027482292))
     @lightbulb.add_cooldown(length = 10.0, uses = 1, bucket = lightbulb.GlobalBucket)
     @lightbulb.command("send_prompt", "Send the prompt for verification. Only used once unless there are errors.")
     @lightbulb.implements(lightbulb.SlashCommand)
@@ -133,7 +133,7 @@ if __name__ == "__main__":
         ctx.bot.d.msg_id = msg.id
 
         # No I don't care if it's going to corrupt the json, it's a small bot.
-        with open("./setup/token.json", mode = "w") as fout:
+        with open("./setup/config.json", mode = "w") as fout:
             data = {}
             data["token"] = ctx.bot._token
             data["target_msg"] = msg.id
