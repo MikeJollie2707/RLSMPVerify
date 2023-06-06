@@ -1,4 +1,4 @@
-# RLSMPVerify
+# MooseSMPVerify
 
 ## Setup
 

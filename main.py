@@ -1,4 +1,4 @@
-# This is a quick-and-dirty bot to solve an issue in RLSMP.
+# This is a quick-and-dirty bot to solve an issue in MooseSMP.
 # Therefore, the code practices/styles is going to be horrendous. Feel free to refactor it if you want to.
 
 # For Discord components: https://hikari-miru.readthedocs.io/en/latest/
@@ -36,7 +36,7 @@ class VerifyModal(miru.Modal):
 
         embed = hikari.Embed(
             title = "Verification Pending",
-            description = f"Oncoming response from {ctx.author.mention}",
+            description = f"Oncoming response from {ctx.author.mention} ({ctx.author})",
             timestamp = dt.datetime.now().astimezone(),
         )
 
@@ -69,7 +69,7 @@ class ModalTrigger(miru.View):
         await ctx.respond_with_modal(modal)
 
 if __name__ == "__main__":
-    with open("./setup/token.json") as fin:
+    with open("./setup/config.json") as fin:
         data = json.load(fin)
         token = data["token"]
         persisting_msg = data["target_msg"]
@@ -113,7 +113,7 @@ if __name__ == "__main__":
         msg = await ctx.bot.rest.create_message(
             PROMPT_DESTINATION, 
             dedent('''
-            Welcome to RLSMP! The Minecraft and Discord server are locked behind this gate to ensure a safe atmosphere. While it's a private server now, you can request access if you wish to chat or play.
+            Welcome to MooseSMP! The Minecraft and Discord server are locked behind this gate to ensure a safe atmosphere. While it's a private server now, you can request access if you wish to chat or play.
 
             1. Who invited you/How did you find out about this server? Why did you join it?
             2. What's your Java/Bedrock name? If you're just here to chill, answer so.
@@ -133,7 +133,7 @@ if __name__ == "__main__":
         ctx.bot.d.msg_id = msg.id
 
         # No I don't care if it's going to corrupt the json, it's a small bot.
-        with open("./setup/token.json", mode = "w") as fout:
+        with open("./setup/config.json", mode = "w") as fout:
             data = {}
             data["token"] = ctx.bot._token
             data["target_msg"] = msg.id
