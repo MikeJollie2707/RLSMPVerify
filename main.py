@@ -1,4 +1,4 @@
-# This is a quick-and-dirty bot to solve an issue in RLSMP.
+# This is a quick-and-dirty bot to solve an issue in MooseSMP.
 # Therefore, the code practices/styles is going to be horrendous. Feel free to refactor it if you want to.
 
 # For Discord components: https://hikari-miru.readthedocs.io/en/latest/
@@ -113,7 +113,7 @@ if __name__ == "__main__":
         msg = await ctx.bot.rest.create_message(
             PROMPT_DESTINATION, 
             dedent('''
-            Welcome to RLSMP! The Minecraft and Discord server are locked behind this gate to ensure a safe atmosphere. While it's a private server now, you can request access if you wish to chat or play.
+            Welcome to MooseSMP! The Minecraft and Discord server are locked behind this gate to ensure a safe atmosphere. While it's a private server now, you can request access if you wish to chat or play.
 
             1. Who invited you/How did you find out about this server? Why did you join it?
             2. What's your Java/Bedrock name? If you're just here to chill, answer so.
