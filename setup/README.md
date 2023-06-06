@@ -1,6 +1,6 @@
 # Setup
 
-Create a `token.json` in this directory (setup) with the following format:
+Create a `config.json` in this directory (setup) with the following format:
 
 ```json
 {
