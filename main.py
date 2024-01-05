@@ -4,6 +4,7 @@
 # For Discord components: https://hikari-miru.readthedocs.io/en/latest/
 # For Discord commands in general: https://hikari-lightbulb.readthedocs.io/en/latest/
 
+import typing as t
 import hikari
 import lightbulb
 import miru
@@ -16,6 +17,7 @@ from textwrap import dedent
 PROMPTS = (
     "Question 1",
     "Question 2",
+    "Question 3",
 )
 # Make sure to change this in production.
 PROMPT_DESTINATION = 1102847625813831680
@@ -54,7 +56,9 @@ class VerifyModal(miru.Modal):
         )
 
         await ctx.respond(
-            "Your response has been recorded. Please be patient while the staffs verify this response. This can take up to a few hours due to timezones. Sorry about that.",
+            "Your response has been recorded. Please be patient while the staffs verify this response. " +
+            "This can take up to a few hours due to timezones. Sorry about that. " +
+            "If you don't see more channels within a week, it is safe to assume your application is rejected.",
             flags = hikari.MessageFlag.EPHEMERAL,
         )
 
@@ -63,6 +67,9 @@ class VerifyModal(miru.Modal):
 
 # The button used to spawn the modal.
 class ModalTrigger(miru.View):
+    def __init__(self, *, timeout: float | int | dt.timedelta | None = 120, autodefer: bool = True) -> None:
+        # Have to set it to None so it doesn't expire.
+        super().__init__(timeout=None, autodefer=autodefer)
     @miru.button(label = "Click here to answer the questions!", custom_id = "SUPER_UNIQUE_ID_FOR_VERIFY_BUTTON", style = hikari.ButtonStyle.PRIMARY)
     async def modal_button(self, btn: miru.Button, ctx: miru.ViewContext):
         modal = VerifyModal("Verification Form")
@@ -113,13 +120,13 @@ if __name__ == "__main__":
         msg = await ctx.bot.rest.create_message(
             PROMPT_DESTINATION, 
             dedent('''
-            Welcome to MooseSMP! The Minecraft and Discord server are locked behind this gate to ensure a safe atmosphere. While it's a private server now, you can request access if you wish to chat or play.
+            Welcome to the MooseSMP! To access the Minecraft and Discord server, we would like you to answer a few questions:
 
-            1. Who invited you/How did you find out about this server? Why did you join it?
-            2. What's your Java/Bedrock name? If you're just here to chill, answer so.
+            1. Why did you join this server? Do you intend on playing in the SMP or are you just here to chill?
+            2. If you're here to play, what's your Java/Bedrock name? (Type "None" if you don't play on the SMP) *We don't support names with spaces in it.*
+            3. What is the exception to SMP Rule 3?
 
-            Note that we may remove your access if we notice that you stir up trouble or harm the atmosphere of the server.
-            If we already have negative experiences, you may not get access at all. The server is designed to house a small but safe community, which is why it was formally disassociated from Rolling Lounge.
+            Note that we may revoke your access at anytime if we notice that you stir up trouble or harm the atmosphere of the server.
             '''), 
             components = view.build()
         )
