@@ -9,4 +9,4 @@ Create a `config.json` in this directory (setup) with the following format:
 }
 ```
 
-`"token"` is your bot token (don't leak). For `"target_msg"`, just target a random message's **ID** (this will result in an error the first time, but the second time it'll correct itself to the proper ID) or the one in the gate channel.
+`"token"` is your bot token (don't leak). For `"target_msg"`, ideally you want to put the message ID of the one in the gate channel here, but you can also put a dummy value here for initial setup.

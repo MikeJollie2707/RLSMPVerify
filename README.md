@@ -41,25 +41,14 @@ If you have Docker on your machine, you can build a container for this thing.
 
 ```sh
 docker build -t rlsmpverify .
-docker run -d rlsmpverify
+docker run -d --name bot rlsmpverify
 docker ps
 
 # To delete the container and the image
-docker stop <container_id>
-docker rm <container_id>
+docker stop bot
+docker rm bot
 docker images
-docker images rm <image_id>
-```
-
-Or use `quickdocker.sh` if you're on Linux.
-
-```sh
-chmod +x quickdocker.sh
-./quickdocker.sh --build .    # If there's no image of rlsmpverify, this dot is required.
-./quickdocker.sh --build      # Run the container, no dot is required.
-./quickdocker.sh --stop       # Stop container. Can start it again using --build
-./quickdocker.sh --remove     # Stop and remove container.
-./quickdocker.sh --remove-all # Stop and remove both container and the rlsmpverify image.
+docker rmi <image_id>
 ```
 
 Or use `docker compose` if you have it installed. This has the benefit that if your Docker installation starts on reboot, the bot will also starts on reboot.

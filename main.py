@@ -14,10 +14,22 @@ import datetime as dt
 from textwrap import dedent
 
 # Modal limitation is 5 prompts, each prompt is 45 characters max.
+INITIAL_TEXT = '''
+    Welcome to the MooseSMP! To access the Minecraft and Discord server, we would like you to answer a few questions:
+
+    1. Why did you join this server? Do you intend on playing in the SMP or are you just here to chill?
+    2. What's your Java/Bedrock name? (Type "No name" if you don't play on the SMP) *We don't support names with spaces in it.*
+    3. What is the exception to SMP Rule 3 (not the one about proper channels)?
+    4. This server may feature offensive jokes and languages. Are you okay with that?
+
+    Note that we may revoke your access at anytime if we notice that you stir up trouble or harm the atmosphere of the server.
+    *If clicking on the button below gives an error, DM your response to <@472832990012243969>*
+'''
 PROMPTS = (
     "Question 1",
     "Question 2",
     "Question 3",
+    "Question 4",
 )
 # Make sure to change this in production.
 PROMPT_DESTINATION = 1102847625813831680
@@ -48,7 +60,7 @@ class VerifyModal(miru.Modal):
                 value = prompt.value
             )
 
-        msg = await ctx.bot.rest.create_message(
+        msg = await ctx.client.bot.rest.create_message(
             STAFF_REVIEW_CHANNEL_ID,
             content = "@everyone",
             embed = embed,
@@ -62,8 +74,8 @@ class VerifyModal(miru.Modal):
             flags = hikari.MessageFlag.EPHEMERAL,
         )
 
-        await ctx.bot.rest.add_reaction(STAFF_REVIEW_CHANNEL_ID, msg.id, '✅')
-        await ctx.bot.rest.add_reaction(STAFF_REVIEW_CHANNEL_ID, msg.id, '❌')
+        await ctx.client.bot.rest.add_reaction(STAFF_REVIEW_CHANNEL_ID, msg.id, '✅')
+        await ctx.client.bot.rest.add_reaction(STAFF_REVIEW_CHANNEL_ID, msg.id, '❌')
 
 # The button used to spawn the modal.
 class ModalTrigger(miru.View):
@@ -71,7 +83,7 @@ class ModalTrigger(miru.View):
         # Have to set it to None so it doesn't expire.
         super().__init__(timeout=None, autodefer=autodefer)
     @miru.button(label = "Click here to answer the questions!", custom_id = "SUPER_UNIQUE_ID_FOR_VERIFY_BUTTON", style = hikari.ButtonStyle.PRIMARY)
-    async def modal_button(self, btn: miru.Button, ctx: miru.ViewContext):
+    async def modal_button(self, ctx: miru.ViewContext, btn: miru.Button):
         modal = VerifyModal("Verification Form")
         await ctx.respond_with_modal(modal)
 
@@ -82,6 +94,7 @@ if __name__ == "__main__":
         persisting_msg = data["target_msg"]
     
     bot = lightbulb.BotApp(token)
+    miruClient = miru.Client(bot)
 
     # These 2 are needed for the bot to listen for buttons even after restart.
     # For more info, visit https://hikari-miru.readthedocs.io/en/latest/guides/persistent_views.html#bound
@@ -101,7 +114,7 @@ if __name__ == "__main__":
         )
 
         # Start listening for buttons at target_msg.
-        await view.start(message)
+        miruClient.start_view(view, bind_to=message)
     
     @bot.command()
     # Check for Operators role.
@@ -119,18 +132,10 @@ if __name__ == "__main__":
         view = ModalTrigger()
         msg = await ctx.bot.rest.create_message(
             PROMPT_DESTINATION, 
-            dedent('''
-            Welcome to the MooseSMP! To access the Minecraft and Discord server, we would like you to answer a few questions:
-
-            1. Why did you join this server? Do you intend on playing in the SMP or are you just here to chill?
-            2. If you're here to play, what's your Java/Bedrock name? (Type "None" if you don't play on the SMP) *We don't support names with spaces in it.*
-            3. What is the exception to SMP Rule 3?
-
-            Note that we may revoke your access at anytime if we notice that you stir up trouble or harm the atmosphere of the server.
-            '''), 
+            dedent(INITIAL_TEXT), 
             components = view.build()
         )
-        await view.start(msg)
+        miruClient.start_view(view, bind_to=msg)
 
         # Now we respond to the command's interaction.
         await ctx.respond(f"A new prompt has been created in <#{PROMPT_DESTINATION}>. Go check it out.")
@@ -146,5 +151,4 @@ if __name__ == "__main__":
             data["target_msg"] = msg.id
             json.dump(data, fout, indent = 4)
     
-    miru.install(bot)
     bot.run()
